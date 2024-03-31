@@ -47,6 +47,23 @@ const Elevator = ({elevatorID}) => {
                 console.log(`Elevator ${elevatorId} is moving ${direction} to floor ${currentFloor + (direction == ' up' ? 1 : -1)}`);
             }
         }, {isMoving, curentFloor,direction, elevatorId});
+
+        const handleButtonPress = (floor) => {
+            let closestElevator = null;
+            let minDistance = Number.MAX_VALUE;
+
+            elevators.forEach(elevator => {
+                const distance = Math.abs(elevator.currentFloor - userFloor);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestElevator = elevator;
+                }
+            });
+
+            
+
+
+        }
   return (
     <div>Elevator</div>
   )
