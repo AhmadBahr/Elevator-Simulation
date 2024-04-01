@@ -1,17 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    elevators: [
-      { id: 'A', currentFloor: GF },
-      { id: 'B', currentFloor: GF },
-      { id: 'C', currentFloor: GF },
-      { id: 'D', currentFloor: GF },
-      { id: 'E', currentFloor: GF },
-      { id: 'F', currentFloor: GF },
-      { id: 'G', currentFloor: GF },
-      { id: 'H', currentFloor: GF },
-    ],
-  };
+  elevators: [
+    { id: 'A', currentFloor: 1 },
+    { id: 'B', currentFloor: 1 },
+    { id: 'C', currentFloor: 1 },
+    { id: 'D', currentFloor: 1 },
+    { id: 'E', currentFloor: 1 },
+    { id: 'F', currentFloor: 1 },
+    { id: 'G', currentFloor: 1 },
+    { id: 'H', currentFloor: 1 },
+  ],
+};
+
 
   const elevatorSlice = createSlice({
     name: 'elevator',
