@@ -44,7 +44,7 @@ const ElevatorControlPanel = () => {
           alert("Elevator panel is disabled. Please wait for the elevator to arrive.");
         }
       };
-      
+
       const handleFloorInput = (value) => {
         if (!isNaN(value)) {
           const newInput = floorInput + value;
@@ -60,4 +60,24 @@ const ElevatorControlPanel = () => {
         }
       };
       const floors = Array.from({ length: 20 }, (_, i) => i + 1);
-    }  
+
+  return (
+    <div className="control-panel">
+      {disabled && <p>Elevator panel is disabled. Please wait for the elevator to arrive.</p>}
+      <div className="floor-buttons">
+        {floors.map(floor => (
+          <button key={floor} disabled={disabled || buttonDisabled} onClick={() => handleButtonPress(floor)}>
+            {floor}
+          </button>
+        ))}
+        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+          <button key={num} disabled={disabled || buttonDisabled} onClick={() => handleFloorInput(num)}>
+            {num}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default ElevatorControlPanel;
