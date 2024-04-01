@@ -1,0 +1,17 @@
+.elevator {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+@keyframes blink {
+    0%, 100% {
+        background-color: transparent;
+    }
+    50% {
+        background-color:  yellow;
+    }
+}
+ .blink {
+    animation: blink 1s linear infinite;
+ }
