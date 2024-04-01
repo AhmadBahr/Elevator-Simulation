@@ -1,0 +1,12 @@
+.control-panel {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .control-panel button {
+    margin: 0 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
