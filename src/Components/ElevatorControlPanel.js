@@ -44,5 +44,4 @@ const ElevatorControlPanel = () => {
           alert("Elevator panel is disabled. Please wait for the elevator to arrive.");
         }
       };
-      
-    }    
+    }  
