@@ -44,4 +44,20 @@ const ElevatorControlPanel = () => {
           alert("Elevator panel is disabled. Please wait for the elevator to arrive.");
         }
       };
+      
+      const handleFloorInput = (value) => {
+        if (!isNaN(value)) {
+          const newInput = floorInput + value;
+          if (parseInt(newInput) <= 20) {
+            if ((newInput.length === 2 && parseInt(newInput) >= 10) || (newInput.length === 1 && parseInt(newInput) > 0)) {
+              const selectedFloor = parseInt(newInput);
+              handleButtonPress(selectedFloor);
+              setFloorInput('');
+            } else {
+              setFloorInput(newInput);
+            }
+          }
+        }
+      };
+      const floors = Array.from({ length: 20 }, (_, i) => i + 1);
     }  
