@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import elevatorArrivedSound from '../assets/elevator-arrived.mp3';
 
 const Elevator = ({ elevatorId }) => {
   const elevators = useSelector(state => state.elevator.elevators);
@@ -8,8 +7,15 @@ const Elevator = ({ elevatorId }) => {
   const [direction, setDirection] = useState('up');
   const [isMoving, setIsMoving] = useState(false);
   const [blink, setBlink] = useState(false);
-  const [desiredFloor, setDesiredFloor] = useState(null);
-  const [audio] = useState(new Audio(elevatorArrivedSound));
+  const [audio, setAudio] = useState(null); 
+
+  useEffect(() => {
+    import('../assets/ding.mp3').then(module => {
+      setAudio(new Audio(module.default));
+    }).catch(error => {
+      console.error('Error loading sound file:', error);
+    });
+  }, []); 
 
   const moveElevator = () => {
     setIsMoving(true);
@@ -40,9 +46,8 @@ const Elevator = ({ elevatorId }) => {
       setIsMoving(false);
       console.log(`Elevator ${elevatorId} is now at floor ${nextFloor}`);
 
-      // Check if the elevator has arrived at the desired floor
-      if (nextFloor === desiredFloor) {
-        audio.play(); // Play the elevator arrived sound
+      if (audio) {
+        audio.play();
       }
     }, 2000);
   };
@@ -58,7 +63,6 @@ const Elevator = ({ elevatorId }) => {
   }, [isMoving, currentFloor, direction, elevatorId]);
 
   const handleButtonPress = userFloor => {
-    setDesiredFloor(userFloor); // Set the desired floor
     let closestElevator = null;
     let minDistance = Number.MAX_VALUE;
 
