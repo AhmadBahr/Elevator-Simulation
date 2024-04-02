@@ -13,7 +13,7 @@ const ElevatorControlPanel = () => {
   const [starPressed, setStarPressed] = useState(false);
 
   useEffect(() => {
-    setStarPressed(false); // Initialize starPressed to false when component mounts
+    setStarPressed(false); 
   }, []);
 
   const calculateClosestElevator = (userFloor) => {
