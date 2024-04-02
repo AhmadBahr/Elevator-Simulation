@@ -2,16 +2,18 @@
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
-}
-
-@keyframes blink {
+  }
+  @keyframes blink {
     0%, 100% {
-        background-color: transparent;
+      background-color: transparent;
     }
     50% {
-        background-color:  yellow;
+      background-color: yellow;
     }
-}
- .blink {
+  }
+  
+  .blink {
     animation: blink 1s linear infinite;
- }
+  }
+  
+  

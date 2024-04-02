@@ -13,27 +13,25 @@ const initialState = {
   ],
 };
 
-
-  const elevatorSlice = createSlice({
-    name: 'elevator',
-    initialState,
-    reducers: {
-      moveToFloor(state, action) {
-        const { elevatorId, floor } = action.payload;
-        const elevator = state.elevators.find(e => e.id === elevatorId);
-        if (elevator) {
-          elevator.currentFloor = floor;
-        }
-      },
-      elevatorArrived(state, action) {
-        const { floor } = action.payload;
-        state.elevators.forEach(elevator => {
-          elevator.currentFloor = floor;
-        });
-      },
+const elevatorSlice = createSlice({
+  name: 'elevator',
+  initialState,
+  reducers: {
+    moveToFloor(state, action) {
+      const { elevatorId, floor } = action.payload;
+      const elevator = state.elevators.find(e => e.id === elevatorId);
+      if (elevator) {
+        elevator.currentFloor = floor;
+      }
     },
-  });
-  
-  export const { moveToFloor, elevatorArrived } = elevatorSlice.actions;
-  export default elevatorSlice.reducer;
-  
+    elevatorArrived(state, action) {
+      const { floor } = action.payload;
+      state.elevators.forEach(elevator => {
+        elevator.currentFloor = floor;
+      });
+    },
+  },
+});
+
+export const { moveToFloor, elevatorArrived } = elevatorSlice.actions;
+export default elevatorSlice.reducer;
