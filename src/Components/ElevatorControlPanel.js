@@ -37,11 +37,13 @@ const ElevatorControlPanel = () => {
       
       if (closestElevator) {
         alert(`Elevator ${closestElevator.id} is coming to floor ${userFloor}.`);
-        dispatch(moveToFloor({ elevatorId: closestElevator.id, floor: userFloor }));
-        setButtonDisabled(true);
         setTimeout(() => {
-          setButtonDisabled(false);
-          alert(`Elevator ${closestElevator.id} has arrived at floor ${userFloor}.`);
+          dispatch(moveToFloor({ elevatorId: closestElevator.id, floor: userFloor }));
+          setButtonDisabled(true);
+          setTimeout(() => {
+            setButtonDisabled(false);
+            alert(`Elevator ${closestElevator.id} has arrived at floor ${userFloor}.`);
+          }, 5000); 
         }, 5000);
       } else {
         alert('No available elevators at the moment.');
@@ -50,7 +52,6 @@ const ElevatorControlPanel = () => {
       alert("Elevator panel is disabled. Please wait for the elevator to arrive.");
     }
   };
-
   const handleFloorInput = (value) => {
     if (!isNaN(value)) {
       const newInput = floorInput + value;
