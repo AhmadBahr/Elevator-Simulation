@@ -11,6 +11,7 @@ const Elevator = ({ elevatorId }) => {
   const [direction, setDirection] = useState('up');
   const [isMoving, setIsMoving] = useState(false);
   const [blink, setBlink] = useState(false);
+  const [userRequestedFloor, setUserRequestedFloor] = useState(null);
 
   const moveElevator = () => {
     setIsMoving(true);
@@ -38,6 +39,10 @@ const Elevator = ({ elevatorId }) => {
       setCurrentFloor(nextFloor);
       setDirection(nextDirection);
 
+      if (nextFloor === userRequestedFloor) {
+        alert(`Elevator ${elevatorId} has arrived at floor ${nextFloor} for user.`);
+      }
+
       setIsMoving(false);
       console.log(`Elevator ${elevatorId} is now at floor ${nextFloor}`);
     }, 2000);
@@ -62,6 +67,7 @@ const Elevator = ({ elevatorId }) => {
     });
 
     if (closestElevator) {
+      setUserRequestedFloor(userFloor); 
       alert(`Elevator ${closestElevator.id} is coming to floor ${userFloor}.`);
       dispatch(moveToFloor({ elevatorId: closestElevator.id, floor: userFloor })); 
       setBlink(true);
