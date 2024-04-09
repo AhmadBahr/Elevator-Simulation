@@ -15,7 +15,7 @@ const UserComponent = ({ floor }) => {
       } else {
         clearInterval(interval);
       }
-    }, 250); 
+    }, 500);
 
     return () => clearInterval(interval);
   }, [floor]);
