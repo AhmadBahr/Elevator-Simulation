@@ -87,7 +87,7 @@ const Elevator = ({ elevatorId }) => {
       setPressedFloor(userFloor);
       setTimeout(() => {
         setBlink(false);
-        setPressedFloor(null); // Reset pressed floor after 2 seconds
+        setPressedFloor(null); 
       }, 2000);
     } else {
       // No available elevators
