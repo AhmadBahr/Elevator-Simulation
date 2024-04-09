@@ -11,6 +11,7 @@ const Elevator = ({ elevatorId }) => {
   const [direction, setDirection] = useState('up');
   const [isMoving, setIsMoving] = useState(false);
   const [blink, setBlink] = useState(false);
+  const [pressedFloor, setPressedFloor] = useState(null);
 
   const moveElevator = () => {
     setIsMoving(true);
@@ -39,7 +40,7 @@ const Elevator = ({ elevatorId }) => {
       setDirection(nextDirection);
 
       setIsMoving(false);
-      console.log(`Elevator ${elevatorId} is now at floor ${nextFloor}`);
+      // console.log(`Elevator ${elevatorId} is now at floor ${nextFloor}`);
 
       // Dispatch action when elevator arrives at floor
       dispatch(moveToFloor({ elevatorId, floor: nextFloor }));
@@ -51,7 +52,7 @@ const Elevator = ({ elevatorId }) => {
 
   useEffect(() => {
     if (isMoving) {
-      console.log(`Elevator ${elevatorId} is moving ${direction} to floor ${currentFloor + (direction === 'up' ? 1 : -1)}`);
+      // console.log(`Elevator ${elevatorId} is moving ${direction} to floor ${currentFloor + (direction === 'up' ? 1 : -1)}`);
     }
   }, [isMoving, currentFloor, direction, elevatorId]);
 
@@ -83,8 +84,10 @@ const Elevator = ({ elevatorId }) => {
     if (closestElevator) {
       dispatch(moveToFloor({ elevatorId: closestElevator.id, floor: userFloor }));
       setBlink(true);
+      setPressedFloor(userFloor);
       setTimeout(() => {
         setBlink(false);
+        setPressedFloor(null); // Reset pressed floor after 2 seconds
       }, 2000);
     } else {
       // No available elevators
@@ -94,11 +97,11 @@ const Elevator = ({ elevatorId }) => {
   return (
     <div className={`elevator ${blink ? 'blink' : ''}`}>
       <div className="direction-arrows">
-        <div className="arrow-container" onClick={() => setDirection('up')}>
-          <span className="arrow">&#8593;</span>
+        <div className="arrow-container" onClick={() => { setDirection('up'); handleButtonPress(currentFloor); }}>
+          <span className={`arrow ${pressedFloor === currentFloor && direction === 'up' ? 'pressed' : ''}`}>&#8593;</span>
         </div>
-        <div className="arrow-container" onClick={() => setDirection('down')}>
-          <span className="arrow">&#8595;</span>
+        <div className="arrow-container" onClick={() => { setDirection('down'); handleButtonPress(currentFloor); }}>
+          <span className={`arrow ${pressedFloor === currentFloor && direction === 'down' ? 'pressed' : ''}`}>&#8595;</span>
         </div>
       </div>
       <p>Elevator {elevatorId}</p>
