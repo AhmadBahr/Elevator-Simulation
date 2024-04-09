@@ -17,19 +17,31 @@ const Elevator = ({ elevatorId }) => {
     }
   }, [isMoving, currentFloor, elevatorId]);
 
+  useEffect(() => {
+    // Start moving the elevator when component mounts
+    setIsMoving(true);
+  }, []);
+
   const moveElevator = () => {
     setTimeout(() => {
       let nextFloor;
       let nextDirection;
 
-      if (currentFloor === 1) {
+      // Generate a random floor
+      const randomFloor = Math.floor(Math.random() * 20) + 1;
+
+      // Determine direction based on the random floor
+      if (randomFloor > currentFloor) {
         nextDirection = "up";
-      } else if (currentFloor === 20) {
+      } else if (randomFloor < currentFloor) {
         nextDirection = "down";
       } else {
-        nextDirection = Math.random() < 0.5 ? "up" : "down";
+        // If the random floor is the same as the current floor, stay in place
+        setIsMoving(false);
+        return;
       }
 
+      // Set the next floor based on the direction
       if (nextDirection === "up" && currentFloor < 20) {
         nextFloor = currentFloor + 1;
       } else if (nextDirection === "down" && currentFloor > 1) {
@@ -40,7 +52,6 @@ const Elevator = ({ elevatorId }) => {
       }
 
       setCurrentFloor(nextFloor);
-      setIsMoving(false);
 
       // Dispatch action when elevator arrives at floor
       dispatch(moveToFloor({ elevatorId, floor: nextFloor }));
@@ -55,28 +66,10 @@ const Elevator = ({ elevatorId }) => {
     }, 2000);
   };
 
-  const handleButtonPress = (userFloor) => {
-    const closestElevator = elevators.find(
-      (elevator) => elevator.id === elevatorId
-    );
-
-    if (closestElevator) {
-      // Determine direction based on user's selected floor
-      const direction = userFloor > currentFloor ? "up" : "down";
-
-      // Show alert indicating that the elevator is the closest to the user
-      alert(`Elevator ${closestElevator.id} is the closest to you.`);
-
-      // Dispatch action to move elevator
-      dispatch(
-        moveToFloor({ elevatorId: closestElevator.id, floor: userFloor })
-      );
-
-      // Start elevator movement
-      setIsMoving(true);
-    } else {
-      console.log("No available elevators at the moment.");
-    }
+  const handleButtonPress = (direction) => {
+    const nextFloor = direction === "up" ? currentFloor + 1 : currentFloor - 1;
+    dispatch(moveToFloor({ elevatorId, floor: nextFloor }));
+    setCurrentFloor(nextFloor);
   };
 
   return (
@@ -87,7 +80,7 @@ const Elevator = ({ elevatorId }) => {
             blinkDirection === "up" ? "pressed" : ""
           }`}
           onClick={() => {
-            handleButtonPress(currentFloor + 1); // Move up
+            handleButtonPress("up");
           }}
         >
           <span className="arrow">&#8593;</span>
@@ -97,7 +90,7 @@ const Elevator = ({ elevatorId }) => {
             blinkDirection === "down" ? "pressed" : ""
           }`}
           onClick={() => {
-            handleButtonPress(currentFloor - 1); // Move down
+            handleButtonPress("down");
           }}
         >
           <span className="arrow">&#8595;</span>
