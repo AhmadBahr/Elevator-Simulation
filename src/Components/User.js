@@ -22,7 +22,7 @@ const User = () => {
 
     setTimeout(() => {
       console.log(`User has arrived at floor ${userFloor}.`);
-      alert(`User has arrived at floor ${userFloor}.`);
+      // alert(`User has arrived at floor ${userFloor}.`);
     }, 5000); 
   };
 

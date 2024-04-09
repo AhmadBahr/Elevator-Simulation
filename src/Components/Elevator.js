@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { moveToFloor } from '../Slices/elevatorSlice'; 
+import { moveToFloor } from '../Slices/elevatorSlice';
 import './Elevator.css';
 
 const Elevator = ({ elevatorId }) => {
@@ -11,7 +11,6 @@ const Elevator = ({ elevatorId }) => {
   const [direction, setDirection] = useState('up');
   const [isMoving, setIsMoving] = useState(false);
   const [blink, setBlink] = useState(false);
-  const [userRequestedFloor, setUserRequestedFloor] = useState(null);
 
   const moveElevator = () => {
     setIsMoving(true);
@@ -39,12 +38,14 @@ const Elevator = ({ elevatorId }) => {
       setCurrentFloor(nextFloor);
       setDirection(nextDirection);
 
-      if (nextFloor === userRequestedFloor) {
-        alert(`Elevator ${elevatorId} has arrived at floor ${nextFloor} for user.`);
-      }
-
       setIsMoving(false);
       console.log(`Elevator ${elevatorId} is now at floor ${nextFloor}`);
+
+      // Dispatch action when elevator arrives at floor
+      dispatch(moveToFloor({ elevatorId, floor: nextFloor }));
+
+      // Reset blink
+      setBlink(false);
     }, 2000);
   };
 
@@ -54,7 +55,20 @@ const Elevator = ({ elevatorId }) => {
     }
   }, [isMoving, currentFloor, direction, elevatorId]);
 
-  const handleButtonPress = userFloor => {
+  useEffect(() => {
+    moveElevator();
+  }, [currentFloor]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const randomFloor = Math.floor(Math.random() * 20) + 1;
+      handleButtonPress(randomFloor);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleButtonPress = (userFloor) => {
     let closestElevator = null;
     let minDistance = Number.MAX_VALUE;
 
@@ -67,34 +81,26 @@ const Elevator = ({ elevatorId }) => {
     });
 
     if (closestElevator) {
-      setUserRequestedFloor(userFloor); 
-      alert(`Elevator ${closestElevator.id} is coming to floor ${userFloor}.`);
-      dispatch(moveToFloor({ elevatorId: closestElevator.id, floor: userFloor })); 
+      dispatch(moveToFloor({ elevatorId: closestElevator.id, floor: userFloor }));
       setBlink(true);
       setTimeout(() => {
         setBlink(false);
       }, 2000);
     } else {
-      alert('No available elevators at the moment.');
+      // No available elevators
     }
   };
 
-  useEffect(() => {
-    moveElevator();
-  }, [currentFloor]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const randomFloor = Math.floor(Math.random() * 20) + 1;
-      alert(`User wants to go to floor ${randomFloor}.`);
-      handleButtonPress(randomFloor);
-    }, 5000); 
-
-    return () => clearInterval(interval);
-  }, []); 
-
   return (
     <div className={`elevator ${blink ? 'blink' : ''}`}>
+      <div className="direction-arrows">
+        <div className="arrow-container" onClick={() => setDirection('up')}>
+          <span className="arrow">&#8593;</span>
+        </div>
+        <div className="arrow-container" onClick={() => setDirection('down')}>
+          <span className="arrow">&#8595;</span>
+        </div>
+      </div>
       <p>Elevator {elevatorId}</p>
       <p className="floor-info">Currently at floor: {currentFloor}</p>
     </div>

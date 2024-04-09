@@ -36,20 +36,20 @@ const ElevatorControlPanel = () => {
       const closestElevator = calculateClosestElevator(userFloor);
       
       if (closestElevator) {
-        alert(`Elevator ${closestElevator.id} is coming to floor ${userFloor}.`);
+        // alert(`Elevator ${closestElevator.id} is coming to floor ${userFloor}.`);
         setTimeout(() => {
           dispatch(moveToFloor({ elevatorId: closestElevator.id, floor: userFloor }));
           setButtonDisabled(true);
           setTimeout(() => {
             setButtonDisabled(false);
-            alert(`Elevator ${closestElevator.id} has arrived at floor ${userFloor}.`);
+            // alert(`Elevator ${closestElevator.id} has arrived at floor ${userFloor}.`);
           }, 5000); 
         }, 5000);
       } else {
-        alert('No available elevators at the moment.');
+        // alert('No available elevators at the moment.');
       }
     } else {
-      alert("Elevator panel is disabled. Please wait for the elevator to arrive.");
+      // alert("Elevator panel is disabled. Please wait for the elevator to arrive.");
     }
   };
   const handleFloorInput = (value) => {
