@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { moveToFloor } from '../Slices/elevatorSlice'; 
 import './ElevatorControlPanel.css';
+import UserComponent from './UserComponent';
 
 const ElevatorControlPanel = () => {
   const dispatch = useDispatch();
@@ -14,9 +15,20 @@ const ElevatorControlPanel = () => {
   const [selectedFloor, setSelectedFloor] = useState(null);
   const [direction, setDirection] = useState(null);
   const [previousFloor, setPreviousFloor] = useState(null);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     setStarPressed(false); 
+  }, []);
+
+  // Simulate users entering the building
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const floor = Math.floor(Math.random() * 20) + 1;
+      setUsers(prevUsers => [...prevUsers, { id: Date.now(), floor }]);
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const calculateClosestElevator = (userFloor) => {
@@ -46,7 +58,7 @@ const ElevatorControlPanel = () => {
         alert(message);
     
         // Log direction
-        console.log(`Direction: ${direction}`);
+        // console.log(`Direction: ${direction}`);
     
         // Dispatch action to move elevator
         dispatch(moveToFloor({ elevatorId: closestElevator.id, floor: userFloor }));
@@ -168,6 +180,11 @@ const ElevatorControlPanel = () => {
       <div className="keypad">
         <button onClick={handleStarPress} className={`star-btn ${starPressed ? 'active' : ''}`}>⭐</button>
       </div>
+
+      {/* Render users */}
+      {users.map(user => (
+        <UserComponent key={user.id} floor={user.floor} />
+      ))}
     </div>
   );
 };

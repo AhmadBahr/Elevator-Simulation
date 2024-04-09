@@ -14,7 +14,6 @@ const Elevator = ({ elevatorId }) => {
 
   useEffect(() => {
     if (isMoving) {
-      console.log(`Elevator ${elevatorId} is moving to floor ${currentFloor}`);
     }
   }, [isMoving, currentFloor, elevatorId]);
 
