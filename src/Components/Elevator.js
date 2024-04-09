@@ -8,16 +8,16 @@ const Elevator = ({ elevatorId }) => {
   const dispatch = useDispatch();
 
   const [currentFloor, setCurrentFloor] = useState(1);
-  const [direction, setDirection] = useState(null);
+  const [direction, setDirection] = useState('up');
   const [isMoving, setIsMoving] = useState(false);
   const [blink, setBlink] = useState(false);
-  const [arrowBlink, setArrowBlink] = useState(null);
+  const [pressedFloor, setPressedFloor] = useState(null);
 
   const moveElevator = () => {
     setIsMoving(true);
     setTimeout(() => {
       let nextFloor;
-      let nextDirection;
+      let nextDirection = direction;
 
       if (currentFloor === 1) {
         nextDirection = 'up';
@@ -40,6 +40,7 @@ const Elevator = ({ elevatorId }) => {
       setDirection(nextDirection);
 
       setIsMoving(false);
+      // console.log(`Elevator ${elevatorId} is now at floor ${nextFloor}`);
 
       // Dispatch action when elevator arrives at floor
       dispatch(moveToFloor({ elevatorId, floor: nextFloor }));
@@ -51,7 +52,7 @@ const Elevator = ({ elevatorId }) => {
 
   useEffect(() => {
     if (isMoving) {
-      console.log(`Elevator ${elevatorId} is moving ${direction} to floor ${currentFloor + (direction === 'up' ? 1 : -1)}`);
+      // console.log(`Elevator ${elevatorId} is moving ${direction} to floor ${currentFloor + (direction === 'up' ? 1 : -1)}`);
     }
   }, [isMoving, currentFloor, direction, elevatorId]);
 
@@ -59,31 +60,37 @@ const Elevator = ({ elevatorId }) => {
     moveElevator();
   }, [currentFloor]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const randomFloor = Math.floor(Math.random() * 20) + 1;
+      handleButtonPress(randomFloor);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const handleButtonPress = (userFloor) => {
-    const closestElevator = elevators.find(elevator => elevator.id === elevatorId);
+    let closestElevator = null;
+    let minDistance = Number.MAX_VALUE;
+
+    elevators.forEach(elevator => {
+      const distance = Math.abs(elevator.currentFloor - userFloor);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestElevator = elevator;
+      }
+    });
 
     if (closestElevator) {
-      // Determine direction based on user's selected floor
-      const direction = userFloor > currentFloor ? 'up' : 'down';
-
-      // Show alert indicating that the elevator is the closest to the user
-      alert(`Elevator ${closestElevator.id} is the closest to you.`);
-
-      // Dispatch action to move elevator
       dispatch(moveToFloor({ elevatorId: closestElevator.id, floor: userFloor }));
-
-      // Highlight arrow indicating direction
-      setArrowBlink(direction);
-
-      // Set blink effect for elevator
       setBlink(true);
+      setPressedFloor(userFloor);
       setTimeout(() => {
         setBlink(false);
-        // Show alert to indicate that the user has arrived at their floor
-        alert(`You have arrived at floor ${userFloor}.`);
+        setPressedFloor(null); 
       }, 2000);
     } else {
-      console.log('No available elevators at the moment.');
+      // No available elevators
     }
   };
 
@@ -91,10 +98,10 @@ const Elevator = ({ elevatorId }) => {
     <div className={`elevator ${blink ? 'blink' : ''}`}>
       <div className="direction-arrows">
         <div className="arrow-container" onClick={() => { setDirection('up'); handleButtonPress(currentFloor); }}>
-          <span className={`arrow ${arrowBlink === 'up' ? 'pressed' : ''}`}>&#8593;</span>
+          <span className={`arrow ${pressedFloor === currentFloor && direction === 'up' ? 'pressed' : ''}`}>&#8593;</span>
         </div>
         <div className="arrow-container" onClick={() => { setDirection('down'); handleButtonPress(currentFloor); }}>
-          <span className={`arrow ${arrowBlink === 'down' ? 'pressed' : ''}`}>&#8595;</span>
+          <span className={`arrow ${pressedFloor === currentFloor && direction === 'down' ? 'pressed' : ''}`}>&#8595;</span>
         </div>
       </div>
       <p>Elevator {elevatorId}</p>

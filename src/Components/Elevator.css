@@ -30,15 +30,21 @@
   border: 1px solid #000;
   display: flex;
   justify-content: center;
-  align-items: center;
-  cursor: pointer;
+  align-items: center; 
   margin-bottom: 5px;
 }
 
-.arrow {
-  font-size: 20px;
+.arrow-container.up.pressed,
+.arrow-container.down.pressed {
+  background-color: yellow;
+  animation: blink-yellow 0.5s linear forwards; 
 }
 
-.arrow.pressed {
-  background-color: yellow;
+@keyframes blink-yellow {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
