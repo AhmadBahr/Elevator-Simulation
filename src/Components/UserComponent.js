@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './UserComponent.css';
 
-const UserComponent = ({ floor }) => {
+const UserComponent = ({ floor, isEntering }) => {
   const [currentFloor, setCurrentFloor] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -15,13 +15,13 @@ const UserComponent = ({ floor }) => {
       } else {
         clearInterval(interval);
       }
-    }, 500);
+    }, 250);
 
     return () => clearInterval(interval);
   }, [floor]);
 
   return (
-    <div className={`user-container ${isVisible ? 'visible' : ''}`} style={{ bottom: `calc(${currentFloor * 5}%)` }}>
+    <div className={`user-container ${isVisible ? 'visible' : ''} ${isEntering ? 'entering' : 'leaving'}`} style={{ bottom: `calc(${currentFloor * 5}%)` }}>
       <div className="user-icon"></div>
     </div>
   );
