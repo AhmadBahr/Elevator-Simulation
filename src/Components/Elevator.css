@@ -33,11 +33,12 @@
   align-items: center; 
   margin-bottom: 5px;
 }
+.arrow-container.up.pressed .arrow {
+  fill: black;
+}
 
-.arrow-container.up.pressed,
-.arrow-container.down.pressed {
-  background-color: yellow;
-  animation: blink-yellow 0.5s linear forwards; 
+.arrow-container.down.pressed .arrow {
+  fill: yellow;
 }
 
 @keyframes blink-yellow {

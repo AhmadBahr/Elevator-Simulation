@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { moveToFloor } from "../Slices/elevatorSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUp, faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import "./Elevator.css";
 
 const Elevator = ({ elevatorId }) => {
@@ -76,24 +78,16 @@ const Elevator = ({ elevatorId }) => {
     <div className="elevator">
       <div className="direction-arrows">
         <div
-          className={`arrow-container ${
-            blinkDirection === "up" ? "pressed" : ""
-          }`}
-          onClick={() => {
-            handleButtonPress("up");
-          }}
+          className={`arrow-container ${blinkDirection === "up" ? "pressed" : ""}`}
+          onClick={() => handleButtonPress("up")}
         >
-          <span className="arrow">&#8593;</span>
+          <FontAwesomeIcon icon={faArrowUp} style={{ color: blinkDirection === "up" ? "yellow" : "black" }} />
         </div>
         <div
-          className={`arrow-container ${
-            blinkDirection === "down" ? "pressed" : ""
-          }`}
-          onClick={() => {
-            handleButtonPress("down");
-          }}
+          className={`arrow-container ${blinkDirection === "down" ? "pressed" : ""}`}
+          onClick={() => handleButtonPress("down")}
         >
-          <span className="arrow">&#8595;</span>
+          <FontAwesomeIcon icon={faArrowDown} style={{ color: blinkDirection === "down" ? "yellow" : "black" }} />
         </div>
       </div>
       <p>Elevator {elevatorId}</p>
